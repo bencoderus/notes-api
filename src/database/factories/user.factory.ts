@@ -1,6 +1,6 @@
 import faker from "faker";
 import { getCustomRepository } from "typeorm";
-import User from "../../entity/user.entity";
+import User from "../entity/user.entity";
 import { slugify } from "../../utils/helpers";
 import UserRepository from "../../repositories/user.repository";
 import BcryptService from "../../services/bcrypt.service";

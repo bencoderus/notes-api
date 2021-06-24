@@ -10,7 +10,7 @@ import { Response, Request } from "express";
 import { extractValidationMessage, slugify } from "../../utils/helpers/index";
 import NoteRepository from "../../repositories/note.repository";
 import { getCustomRepository } from "typeorm";
-import Note from "../../entity/note.entity";
+import Note from "../../database/entity/note.entity";
 import NoteValidator from "../validators/note.validator";
 
 export default class NoteController {

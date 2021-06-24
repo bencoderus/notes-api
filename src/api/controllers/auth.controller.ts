@@ -11,7 +11,7 @@ import {
   validationErrorResponse,
   createdResponse,
 } from "../../utils/response";
-import User from "../../entity/user.entity";
+import User from "../../database/entity/user.entity";
 import BcryptService from "../../services/bcrypt.service";
 import AuthService from "../../services/auth.service";
 
