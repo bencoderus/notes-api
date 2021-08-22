@@ -1,8 +1,6 @@
-import Joi from "joi";
+import Joi from 'joi';
 
-const schema = Joi.object({
+export default Joi.object({
   title: Joi.string().min(1).max(191).required(),
   content: Joi.string().min(1).required(),
 });
-
-export default schema;

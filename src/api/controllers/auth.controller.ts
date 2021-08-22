@@ -1,19 +1,19 @@
-import { Request, Response } from "express";
-import { getCustomRepository } from "typeorm";
-import UserRepository from "../../repositories/user.repository";
-import { extractValidationMessage } from "../../utils/helpers";
-import RegisterValidator from "../validators/register.validator";
-import LoginValidator from "../validators/login.validator";
+import { Request, Response } from 'express';
+import { getCustomRepository } from 'typeorm';
+import UserRepository from '../../repositories/user.repository';
+import { extractValidationMessage } from '../../utils/helpers';
+import RegisterValidator from '../validators/register.validator';
+import LoginValidator from '../validators/login.validator';
 import {
   okResponse,
   badRequestResponse,
   serverErrorResponse,
   validationErrorResponse,
   createdResponse,
-} from "../../utils/response";
-import User from "../../database/entity/user.entity";
-import BcryptService from "../../services/bcrypt.service";
-import AuthService from "../../services/auth.service";
+} from '../../utils/response';
+import User from '../../database/entity/user.entity';
+import BcryptService from '../../services/bcrypt.service';
+import AuthService from '../../services/auth.service';
 
 export default class AuthController {
   /**
@@ -24,7 +24,7 @@ export default class AuthController {
    */
   public static async login(
     request: Request,
-    response: Response
+    response: Response,
   ): Promise<Response> {
     const data: any = request.body;
 
@@ -33,7 +33,7 @@ export default class AuthController {
 
     if (error) {
       const message: string = extractValidationMessage(error);
-      return validationErrorResponse(response, "Validation error", {
+      return validationErrorResponse(response, 'Validation error', {
         error: message,
       });
     }
@@ -42,26 +42,26 @@ export default class AuthController {
       const user: User | undefined = await User.findByEmail(data.email);
 
       if (!user) {
-        return badRequestResponse(response, "Credential is invalid");
+        return badRequestResponse(response, 'Credential is invalid');
       }
 
       const passwordIsValid = BcryptService.compare(
         data.password,
-        user.password
+        user.password,
       );
 
       if (!passwordIsValid) {
-        return badRequestResponse(response, "Credential is invalid");
+        return badRequestResponse(response, 'Credential is invalid');
       }
 
       const { token } = await AuthService.generateToken(user);
 
-      return okResponse(response, "Login successful", {
+      return okResponse(response, 'Login successful', {
         user,
         token,
       });
     } catch (error) {
-      return serverErrorResponse(response, "Server error", error);
+      return serverErrorResponse(response, 'Server error', error);
     }
   }
 
@@ -73,7 +73,7 @@ export default class AuthController {
    */
   public static async register(
     request: Request,
-    response: Response
+    response: Response,
   ): Promise<Response> {
     const data = request.body;
 
@@ -82,7 +82,7 @@ export default class AuthController {
 
     if (error) {
       const message: string = extractValidationMessage(error);
-      return validationErrorResponse(response, "Validation error", {
+      return validationErrorResponse(response, 'Validation error', {
         error: message,
       });
     }
@@ -92,11 +92,11 @@ export default class AuthController {
       const usernameExists = await User.findByUsername(data.username);
 
       if (emailExists) {
-        return badRequestResponse(response, "Email is already in use");
+        return badRequestResponse(response, 'Email is already in use');
       }
 
       if (usernameExists) {
-        return badRequestResponse(response, "Username is already in use");
+        return badRequestResponse(response, 'Username is already in use');
       }
 
       const password = BcryptService.hash(data.password);
@@ -112,15 +112,15 @@ export default class AuthController {
       const user = await User.save(createdUser);
       const { token } = await AuthService.generateToken(user);
 
-      return createdResponse(response, "User created successfully", {
+      return createdResponse(response, 'User created successfully', {
         user,
         token,
       });
     } catch (error) {
       return serverErrorResponse(
         response,
-        "Unable to create an account",
-        error
+        'Unable to create an account',
+        error,
       );
     }
   }

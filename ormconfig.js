@@ -1,5 +1,6 @@
-import database from './src/config/database';
-export default [
+const database = require('./src/config/database').default;
+
+module.exports = [
   {
     name: 'development',
     type: 'mysql',

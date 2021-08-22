@@ -1,11 +1,11 @@
-import config from "../config";
+import config from '../config';
 import {
   Connection,
   createConnection,
   getConnection,
   getConnectionOptions,
-} from "typeorm";
-import logger from "./logger.service";
+} from 'typeorm';
+import logger from './logger.service';
 
 const environment = config.app.env;
 
@@ -15,12 +15,13 @@ export default class DatabaseService {
       const connectionOptions = await getConnectionOptions(environment);
       const connection = await createConnection({
         ...connectionOptions,
-        name: "default",
+        name: 'default',
       });
 
       return connection;
     } catch (error) {
       logger.error(error.toString());
+      throw error;
     }
   }
 
