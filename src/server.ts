@@ -1,6 +1,6 @@
-import app from "./app";
-import config from "../src/config";
-import DatabaseService from "./services/database.service";
+import app from './app';
+import config from './config/index';
+import DatabaseService from './services/database.service';
 const port = config.app.port;
 const appName = config.app.name;
 

@@ -71,6 +71,7 @@
   },
   "exclude": [
     "node_modules",
+    "ormconfig.ts",
     "jest.config.ts",
     "tests"
   ]

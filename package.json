@@ -4,11 +4,11 @@
   "description": "Building an API to store notes.",
   "main": "server.ts",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon --exec ts-node src/server.ts",
-    "start": "NODE_ENV=production node dist/server.js",
+    "dev": "export NODE_ENV=production || set NODE_ENV=production && nodemon --exec ts-node src/server.ts",
+    "start": "export NODE_ENV=production || set NODE_ENV=production && node dist/server.js",
     "build": "tsc -p .",
     "debug": "ndb dist/server.ts",
-    "test": "NODE_ENV=test jest --maxWorkers=8"
+    "test": "export NODE_ENV=test || set NODE_ENV=test && jest --maxWorkers=8"
   },
   "author": "Benjamin Iduwe",
   "license": "ISC",

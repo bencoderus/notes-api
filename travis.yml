@@ -1,0 +1,18 @@
+language: node_js
+node_js: 
+  - "stable"
+dist: trusty
+services: 
+  - mysql
+env:
+  - NODE_ENV=test PORT=3001 TEST_DATABASE_USERNAME=root TEST_DATABASE_PASSWORD= TEST_DATABASE_NAME=test
+cache:
+  directories:
+    - node_modules
+
+before_install:
+  - mysql -e 'CREATE DATABASE test;'
+install:
+  - npm install
+script:
+  -npm run test
