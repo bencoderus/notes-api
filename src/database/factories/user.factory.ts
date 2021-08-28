@@ -1,21 +1,21 @@
-import faker from "faker";
-import { getCustomRepository } from "typeorm";
-import User from "../entity/user.entity";
-import { slugify } from "../../utils/helpers";
-import UserRepository from "../../repositories/user.repository";
-import BcryptService from "../../services/bcrypt.service";
-import AuthService from "../../services/auth.service";
+import faker from 'faker';
+import { getCustomRepository } from 'typeorm';
+import User from '../entity/user.entity';
+import { slugify } from '../../utils/helpers';
+import UserRepository from '../../repositories/user.repository';
+import HashManager from '../../utils/hash-manager';
+import AuthService from '../../utils/auth-token';
 
 export default class UserFactory {
   public static async create(data: any = {}): Promise<User> {
-    const username = faker.name.firstName() + " " + faker.name.lastName();
+    const username = faker.name.firstName() + ' ' + faker.name.lastName();
 
     let user = {
       firstName: data.firstName ?? faker.name.firstName(),
       lastName: data.lastName ?? faker.name.lastName(),
       username: slugify(data.username ?? username),
       email: data.email ?? faker.internet.email(),
-      password: BcryptService.hash("password"),
+      password: HashManager.hash('password'),
     };
 
     const repository = getCustomRepository(UserRepository);

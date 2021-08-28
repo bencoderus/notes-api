@@ -4,16 +4,12 @@ import UserRepository from '../../repositories/user.repository';
 import { extractValidationMessage } from '../../utils/helpers';
 import RegisterValidator from '../validators/register.validator';
 import LoginValidator from '../validators/login.validator';
-import {
-  okResponse,
-  badRequestResponse,
-  serverErrorResponse,
-  validationErrorResponse,
-  createdResponse,
-} from '../../utils/response';
+import { okResponse, createdResponse } from '../../utils/response';
 import User from '../../database/entity/user.entity';
-import BcryptService from '../../services/bcrypt.service';
-import AuthService from '../../services/auth.service';
+import HashManager from '../../utils/hash-manager';
+import AuthService from '../../utils/auth-token';
+import HttpException from '../../exceptions/http.exception';
+import ValidationException from '../../exceptions/validation.exception';
 
 export default class AuthController {
   /**
@@ -24,7 +20,7 @@ export default class AuthController {
    */
   public static async login(
     request: Request,
-    response: Response,
+    response: Response
   ): Promise<Response> {
     const data: any = request.body;
 
@@ -33,36 +29,21 @@ export default class AuthController {
 
     if (error) {
       const message: string = extractValidationMessage(error);
-      return validationErrorResponse(response, 'Validation error', {
-        error: message,
-      });
+      throw new ValidationException(message);
     }
 
-    try {
-      const user: User | undefined = await User.findByEmail(data.email);
+    const user: User | undefined = await User.findByEmail(data.email);
 
-      if (!user) {
-        return badRequestResponse(response, 'Credential is invalid');
-      }
-
-      const passwordIsValid = BcryptService.compare(
-        data.password,
-        user.password,
-      );
-
-      if (!passwordIsValid) {
-        return badRequestResponse(response, 'Credential is invalid');
-      }
-
-      const { token } = await AuthService.generateToken(user);
-
-      return okResponse(response, 'Login successful', {
-        user,
-        token,
-      });
-    } catch (error) {
-      return serverErrorResponse(response, 'Server error', error);
+    if (!user || !HashManager.compare(data.password, user.password)) {
+      throw new HttpException('Credential is invalid', 400);
     }
+
+    const { token } = await AuthService.generateToken(user);
+
+    return okResponse(response, 'Login successful', {
+      user,
+      token,
+    });
   }
 
   /**
@@ -73,7 +54,7 @@ export default class AuthController {
    */
   public static async register(
     request: Request,
-    response: Response,
+    response: Response
   ): Promise<Response> {
     const data = request.body;
 
@@ -82,46 +63,36 @@ export default class AuthController {
 
     if (error) {
       const message: string = extractValidationMessage(error);
-      return validationErrorResponse(response, 'Validation error', {
-        error: message,
-      });
+      throw new ValidationException(message);
     }
 
-    try {
-      const emailExists = await User.findByEmail(data.email);
-      const usernameExists = await User.findByUsername(data.username);
+    const emailExists = await User.findByEmail(data.email);
+    const usernameExists = await User.findByUsername(data.username);
 
-      if (emailExists) {
-        return badRequestResponse(response, 'Email is already in use');
-      }
-
-      if (usernameExists) {
-        return badRequestResponse(response, 'Username is already in use');
-      }
-
-      const password = BcryptService.hash(data.password);
-
-      const createdUser: User | undefined = User.create({
-        email: data.email,
-        username: data.username,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        password: password,
-      });
-
-      const user = await User.save(createdUser);
-      const { token } = await AuthService.generateToken(user);
-
-      return createdResponse(response, 'User created successfully', {
-        user,
-        token,
-      });
-    } catch (error) {
-      return serverErrorResponse(
-        response,
-        'Unable to create an account',
-        error,
-      );
+    if (emailExists) {
+      throw new HttpException('Email is already in use', 400);
     }
+
+    if (usernameExists) {
+      throw new HttpException('Username is already in use', 400);
+    }
+
+    const password = HashManager.hash(data.password);
+
+    const createdUser: User | undefined = User.create({
+      email: data.email,
+      username: data.username,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      password: password,
+    });
+
+    const user = await User.save(createdUser);
+    const { token } = await AuthService.generateToken(user);
+
+    return createdResponse(response, 'User created successfully', {
+      user,
+      token,
+    });
   }
 }

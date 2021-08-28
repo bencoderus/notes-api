@@ -1,8 +1,8 @@
-import bcrypt from "bcrypt";
+import bcrypt from 'bcrypt';
 
 const saltRounds = 10;
 
-export default class BcryptService {
+export default class HashManager {
   public static hash(value: string): string {
     return bcrypt.hashSync(value, saltRounds);
   }
