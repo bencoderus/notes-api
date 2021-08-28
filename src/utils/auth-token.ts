@@ -1,10 +1,10 @@
-import jwt from "jsonwebtoken";
-import config from "../config";
+import jwt from 'jsonwebtoken';
+import config from '../config';
 
 const jwtSecret = config.jwt.secret;
 const expiresIn = config.jwt.expires_in;
 
-export default class AuthService {
+export default class AuthToken {
   public static async generateToken(user: any) {
     let token, error;
 
@@ -18,7 +18,8 @@ export default class AuthService {
   }
 
   public static verifyToken(token: string) {
-    let user, error;
+    let user;
+    let error;
 
     try {
       const payload: any = jwt.verify(token, jwtSecret);

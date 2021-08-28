@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import AuthService from '../../services/auth.service';
+import AuthService from '../../utils/auth-token';
 import { unauthorizedResponse } from '../../utils/response';
 
 export default (req: Request, res: Response, next: NextFunction) => {

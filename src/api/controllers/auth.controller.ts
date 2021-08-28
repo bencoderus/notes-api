@@ -4,10 +4,11 @@ import UserRepository from '../../repositories/user.repository';
 import { extractValidationMessage } from '../../utils/helpers';
 import RegisterValidator from '../validators/register.validator';
 import LoginValidator from '../validators/login.validator';
-import { okResponse, badRequestResponse, validationErrorResponse, createdResponse } from '../../utils/response';
+import { okResponse, createdResponse } from '../../utils/response';
 import User from '../../database/entity/user.entity';
-import BcryptService from '../../services/bcrypt.service';
-import AuthService from '../../services/auth.service';
+import HashManager from '../../utils/hash-manager';
+import AuthService from '../../utils/auth-token';
+import { HttpException, ValidationException } from '../../exceptions';
 
 export default class AuthController {
   /**
@@ -24,21 +25,13 @@ export default class AuthController {
 
     if (error) {
       const message: string = extractValidationMessage(error);
-      return validationErrorResponse(response, 'Validation error', {
-        error: message,
-      });
+      throw new ValidationException(message);
     }
 
     const user: User | undefined = await UserRepo.findByEmail(data.email);
 
-    if (!user) {
-      return badRequestResponse(response, 'Credential is invalid');
-    }
-
-    const passwordIsValid = BcryptService.compare(data.password, user.password);
-
-    if (!passwordIsValid) {
-      return badRequestResponse(response, 'Credential is invalid');
+    if (!user || !HashManager.compare(data.password, user.password)) {
+      throw new HttpException('Credential is invalid', 400);
     }
 
     const { token } = await AuthService.generateToken(user);
@@ -63,23 +56,21 @@ export default class AuthController {
 
     if (error) {
       const message: string = extractValidationMessage(error);
-      return validationErrorResponse(response, 'Validation error', {
-        error: message,
-      });
+      throw new ValidationException(message);
     }
 
     const emailExists = await UserRepo.findByEmail(data.email);
     const usernameExists = await UserRepo.findByUsername(data.username);
 
     if (emailExists) {
-      return badRequestResponse(response, 'Email is already in use');
+      throw new HttpException('Email is already in use', 400);
     }
 
     if (usernameExists) {
-      return badRequestResponse(response, 'Username is already in use');
+      throw new HttpException('Username is already in use', 400);
     }
 
-    const password = BcryptService.hash(data.password);
+    const password = HashManager.hash(data.password);
 
     const createdUser: User | undefined = UserRepo.create({
       email: data.email,

@@ -1,10 +1,11 @@
 import { Response, Request } from 'express';
 import { getCustomRepository } from 'typeorm';
-import { okResponse, validationErrorResponse, notFoundResponse, createdResponse } from '../../utils/response/index';
+import { okResponse, createdResponse } from '../../utils/response/index';
 import { extractValidationMessage } from '../../utils/helpers/index';
 import NoteRepository from '../../repositories/note.repository';
 import Note from '../../database/entity/note.entity';
 import NoteValidator from '../validators/note.validator';
+import { HttpException, ValidationException } from '../../exceptions';
 
 export default class NoteController {
   public static async index(request: Request, response: Response): Promise<Response> {
@@ -23,9 +24,7 @@ export default class NoteController {
 
     if (error) {
       const message: string = extractValidationMessage(error);
-      return validationErrorResponse(response, 'Validation error', {
-        error: message,
-      });
+      throw new ValidationException(message);
     }
 
     const note = NoteRepo.create({
@@ -46,7 +45,7 @@ export default class NoteController {
     const note: Note | undefined = await NoteRepo.findOne({ id });
 
     if (!note) {
-      return notFoundResponse(response, 'Note was not found');
+      throw new HttpException('Note was not found', 404);
     }
 
     return okResponse(response, 'Note retrieved successfully', note);
@@ -54,22 +53,20 @@ export default class NoteController {
 
   public static async update(request: Request, response: Response): Promise<Response> {
     const { id } = request.params;
-    const NoteRepo = getCustomRepository(NoteRepository);
-    const note: Note | undefined = await NoteRepo.findOne({ id });
-
-    if (!note) {
-      return notFoundResponse(response, 'Note was not found');
-    }
-
     const data = request.body;
 
     const { error } = NoteValidator.validate(data);
 
     if (error) {
       const message: string = extractValidationMessage(error);
-      return validationErrorResponse(response, 'Validation error', {
-        error: message,
-      });
+      throw new ValidationException(message);
+    }
+
+    const NoteRepo = getCustomRepository(NoteRepository);
+    const note: Note | undefined = await NoteRepo.findOne({ id });
+
+    if (!note) {
+      throw new HttpException('Note was not found', 404);
     }
 
     await NoteRepo.update(
@@ -89,7 +86,7 @@ export default class NoteController {
     const note: Note | undefined = await NoteRepo.findOne({ id });
 
     if (!note) {
-      return notFoundResponse(response, 'Note was not found');
+      throw new HttpException('Note was not found', 404);
     }
 
     await NoteRepo.delete({ id: note.id });

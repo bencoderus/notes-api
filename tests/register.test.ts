@@ -1,7 +1,7 @@
 import app from '../src/app';
 import supertest from 'supertest';
 import faker from 'faker';
-import DatabaseService from '../src/services/database.service';
+import DatabaseService from '../src/utils/database-manager';
 import UserFactory from '../src/database/factories/user.factory';
 
 const request = supertest(app);

@@ -1,15 +1,10 @@
+import { Connection, createConnection, getConnection, getConnectionOptions } from 'typeorm';
 import config from '../config';
-import {
-  Connection,
-  createConnection,
-  getConnection,
-  getConnectionOptions,
-} from 'typeorm';
-import logger from './logger.service';
+import logger from './logger';
 
 const environment = config.app.env;
 
-export default class DatabaseService {
+export default class DatabaseManager {
   public static async createConnection(): Promise<Connection | undefined> {
     try {
       const connectionOptions = await getConnectionOptions(environment);
@@ -20,7 +15,7 @@ export default class DatabaseService {
 
       return connection;
     } catch (error) {
-      logger.error(error.toString());
+      logger.error(error);
       throw error;
     }
   }
@@ -32,8 +27,7 @@ export default class DatabaseService {
       return true;
     } catch (error) {
       logger.error(error);
-
-      return false;
+      throw error;
     }
   }
 }

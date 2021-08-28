@@ -3,8 +3,8 @@ import { getCustomRepository } from 'typeorm';
 import User from '../entity/user.entity';
 import { slugify } from '../../utils/helpers';
 import UserRepository from '../../repositories/user.repository';
-import BcryptService from '../../services/bcrypt.service';
-import AuthService from '../../services/auth.service';
+import BcryptService from '../../utils/hash-manager';
+import AuthService from '../../utils/auth-token';
 
 interface UserTokenInterface {
   user: User;

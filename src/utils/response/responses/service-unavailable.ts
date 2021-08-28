@@ -1,6 +1,6 @@
-import { Response } from "express";
-import sendResponse from "../respond";
-import logger from "../../../services/logger.service";
+import { Response } from 'express';
+import sendResponse from '../respond';
+import logger from '../../../utils/logger';
 const statusCode: number = 503;
 
 const respond = (
