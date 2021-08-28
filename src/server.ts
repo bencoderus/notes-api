@@ -1,7 +1,8 @@
 import app from './app';
 import config from './config/index';
 import DatabaseManager from './utils/database-manager';
-const port = config.app.port;
+
+const { port } = config.app;
 const appName = config.app.name;
 
 app.listen(port, async () => {

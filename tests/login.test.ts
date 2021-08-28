@@ -1,5 +1,5 @@
-import app from '../src/app';
 import supertest from 'supertest';
+import app from '../src/app';
 import DatabaseService from '../src/utils/database-manager';
 import UserFactory from '../src/database/factories/user.factory';
 import User from '../src/database/entity/user.entity';

@@ -1,6 +1,6 @@
-import app from '../src/app';
 import supertest from 'supertest';
 import faker from 'faker';
+import app from '../src/app';
 import DatabaseService from '../src/utils/database-manager';
 import UserFactory from '../src/database/factories/user.factory';
 
@@ -15,7 +15,7 @@ afterAll(async () => {
 });
 
 test('A user can create an account', async () => {
-  let user = {
+  const user = {
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     username: faker.name.firstName(),
@@ -31,7 +31,7 @@ test('A user can create an account', async () => {
 });
 
 test('A user can not create an account with an existing email', async () => {
-  let user = {
+  const user = {
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     username: faker.name.firstName(),
@@ -49,7 +49,7 @@ test('A user can not create an account with an existing email', async () => {
 });
 
 test('A user can not create an account with an existing username', async () => {
-  let user = {
+  const user = {
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     username: faker.name.firstName(),
