@@ -1,8 +1,8 @@
-import { getCustomRepository } from "typeorm";
-import NoteRepository from "../../repositories/note.repository";
-import faker from "faker";
-import User from "../entity/user.entity";
-import Note from "../entity/note.entity";
+import faker from 'faker';
+import { getCustomRepository } from 'typeorm';
+import NoteRepository from '../../repositories/note.repository';
+import User from '../entity/user.entity';
+import Note from '../entity/note.entity';
 
 export default class NoteFactory {
   public static async create(user: User): Promise<Note> {
@@ -14,6 +14,8 @@ export default class NoteFactory {
       userId: user.id,
     });
 
-    return await NoteRepo.save(created);
+    const saved = await NoteRepo.save(created);
+
+    return saved;
   }
 }

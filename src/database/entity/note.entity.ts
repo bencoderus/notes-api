@@ -1,26 +1,19 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  Column,
-  ManyToOne,
-} from "typeorm";
+/* eslint-disable import/no-cycle */
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, ManyToOne } from 'typeorm';
+import User from './user.entity';
 
-import User from "./user.entity";
-
-@Entity({ name: "notes" })
+@Entity({ name: 'notes' })
 export default class Note {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Column()
   title!: string;
 
-  @Column({ type: "text" })
+  @Column({ type: 'text' })
   content!: string;
 
-  @Column({ type: "boolean", default: false })
+  @Column({ type: 'boolean', default: false })
   isPinned!: boolean;
 
   @Column()
@@ -32,6 +25,6 @@ export default class Note {
   @UpdateDateColumn()
   updatedAt!: Date;
 
-  @ManyToOne(() => User, (user) => user.notes)
+  @ManyToOne(() => User, user => user.notes)
   user!: User;
 }

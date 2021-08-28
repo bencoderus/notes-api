@@ -1,17 +1,10 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  Column,
-  OneToMany,
-} from "typeorm";
+/* eslint-disable import/no-cycle */
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, OneToMany } from 'typeorm';
+import Note from './note.entity';
 
-import Note from "./note.entity";
-
-@Entity({ name: "users" })
+@Entity({ name: 'users' })
 export default class User {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Column()
@@ -35,6 +28,6 @@ export default class User {
   @UpdateDateColumn()
   updatedAt!: Date;
 
-  @OneToMany(() => Note, (note) => note.user)
+  @OneToMany(() => Note, note => note.user)
   notes!: [];
 }
