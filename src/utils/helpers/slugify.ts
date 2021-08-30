@@ -1,9 +1,6 @@
-import { generateRandomString } from "../helpers";
+import { generateRandomString } from '../helpers';
 
-const slugify = (
-  title: string,
-  appendRandomString: boolean = false
-): string => {
+const slugify = (title: string, appendRandomString: boolean = false): string => {
   if (appendRandomString) {
     const randomString: string = generateRandomString(10);
     title = `${title} + ${randomString}`;
@@ -11,13 +8,13 @@ const slugify = (
 
   return title
     .toString()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "")
-    .replace(/--+/g, "-");
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-');
 };
 
 export default slugify;

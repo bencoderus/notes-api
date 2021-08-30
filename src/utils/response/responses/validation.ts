@@ -1,12 +1,9 @@
-import { Response } from "express";
-import sendResponse from "../respond";
-const statusCode: number = 422;
+import { Response } from 'express';
+import sendResponse from '../respond';
 
-const respond = (
-  response: Response,
-  message: string,
-  data: any = null
-): Response => {
+const statusCode = 422;
+
+const respond = (response: Response, message: string, data: any = null): Response => {
   return sendResponse(response, statusCode, message, data);
 };
 

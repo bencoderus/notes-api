@@ -8,6 +8,7 @@
     "start": "export NODE_ENV=production || set NODE_ENV=production && node dist/server.js",
     "build": "tsc -p .",
     "debug": "ndb dist/server.ts",
+    "format": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "test": "export NODE_ENV=test || set NODE_ENV=test && jest --maxWorkers=8"
   },
   "author": "Benjamin Iduwe",

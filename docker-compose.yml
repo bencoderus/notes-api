@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  notes_app:
+    depends_on:
+      - notes_db
+    build: .
+    restart: always
+    env_file: ./.env
+    ports:
+      - $APP_PORT:$APP_PORT
+    environment:
+      - DATABASE_HOST=notes_db
+    stdin_open: true
+    tty: true
+    networks:
+      - notes_connect
+
+  notes_db:
+    image: mysql:5.7
+    restart: always
+    env_file: ./.env
+    environment:
+      - MYSQL_DATABASE=$DATABASE_NAME
+      - MYSQL_ALLOW_EMPTY_PASSWORD='yes'
+    ports:
+      - '3306:3306'
+    volumes:
+      - notes_mysql:/var/lib/mysql
+    networks:
+      - notes_connect
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      timeout: 20s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - '3005:80'
+    depends_on:
+      - notes_db
+    networks:
+      - notes_connect
+    environment:
+      - PMA_HOST=notes_db
+      - PMA_PORT=3306
+
+networks:
+  notes_connect:
+
+volumes:
+  notes_mysql:

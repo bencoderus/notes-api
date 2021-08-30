@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  notes_db:
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_DATABASE=$DATABASE_NAME
+      - MYSQL_ALLOW_EMPTY_PASSWORD='yes'
+    ports:
+      - '3306:3306'
+    volumes:
+      - db:/var/lib/mysql
+  notes_app:
+    depends_on:
+      - notes_db
+    build: .
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - $APP_PORT:$APP_PORT
+    environment:
+      - DATABASE_HOST=notes_db
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:
