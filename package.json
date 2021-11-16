@@ -8,7 +8,7 @@
     "prestart": "npm run build",
     "start": "export NODE_ENV=production || set NODE_ENV=production && node dist/server.js",
     "start:staging": "export NODE_ENV=staging || set NODE_ENV=staging && nodemon src/server.ts",
-    "build": "npx tsc -p .",
+    "build": "./node_modules/.bin/tsc -p .",
     "debug": "ndb dist/server.ts",
     "format": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "test": "export NODE_ENV=test || set NODE_ENV=test && jest --maxWorkers=8"
