@@ -5,6 +5,7 @@
   "main": "server.ts",
   "scripts": {
     "dev": "export NODE_ENV=development || set NODE_ENV=development && nodemon --exec ts-node src/server.ts",
+    "prestart": "npm run build",
     "start": "export NODE_ENV=production || set NODE_ENV=production && node dist/server.js",
     "start:staging": "export NODE_ENV=staging || set NODE_ENV=staging && nodemon src/server.ts",
     "build": "tsc -p .",
