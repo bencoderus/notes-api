@@ -2,7 +2,7 @@
   "name": "notes-api",
   "version": "1.0.0",
   "description": "Building an API to manage notes.",
-  "main": "server.ts",
+  "main": "/dist/server.js",
   "scripts": {
     "dev": "export NODE_ENV=development || set NODE_ENV=development && nodemon --exec ts-node src/server.ts",
     "prestart": "npm run build",
