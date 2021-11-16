@@ -4,7 +4,7 @@ WORKDIR /notes-api
 
 COPY . .
 
-RUN npm install -g typescript nodemon ts-node && npm link typescript && npm install
+RUN npm install
 
 EXPOSE 3000
 
