@@ -1,4 +1,4 @@
-FROM node:14.17.6-alpine
+FROM node:lts
 
 WORKDIR /notes-api
 
@@ -8,4 +8,4 @@ RUN npm install -g typescript nodemon ts-node && npm link typescript && npm inst
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start:staging" ] 
+CMD ["npm", "run", "start" ] 
