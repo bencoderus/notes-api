@@ -13,7 +13,7 @@
     "test": "export NODE_ENV=test && jest --maxWorkers=8"
   },
   "author": "Benjamin Iduwe",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/bcrypt": "^3.0.1",
     "@types/cors": "^2.8.10",
