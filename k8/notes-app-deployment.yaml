@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose.yml convert
+    kompose.version: 1.26.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: notes-app
+  name: notes-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: notes-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose -f docker-compose.yml convert
+        kompose.version: 1.26.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/notes_connect: "true"
+        io.kompose.service: notes-app
+    spec:
+      containers:
+        - env:
+            - name: APP_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: APP_NAME
+                  name: env
+            - name: APP_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: APP_PORT
+                  name: env
+            - name: APP_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: APP_URL
+                  name: env
+            - name: DATABASE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_HOST
+                  name: env
+            - name: DATABASE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_NAME
+                  name: env
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_PASSWORD
+                  name: env
+            - name: DATABASE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_PORT
+                  name: env
+            - name: DATABASE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_USERNAME
+                  name: env
+            - name: JWT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  key: JWT_SECRET
+                  name: env
+            - name: JWT_TOKEN_EXPIRES_IN_HOURS
+              valueFrom:
+                configMapKeyRef:
+                  key: JWT_TOKEN_EXPIRES_IN_HOURS
+                  name: env
+            - name: TEST_DATABASE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: TEST_DATABASE_HOST
+                  name: env
+            - name: TEST_DATABASE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: TEST_DATABASE_NAME
+                  name: env
+            - name: TEST_DATABASE_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: TEST_DATABASE_PASSWORD
+                  name: env
+            - name: TEST_DATABASE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: TEST_DATABASE_USERNAME
+                  name: env
+          image: notes-app
+          name: notes_app
+          ports:
+            - containerPort: 3000
+          resources: {}
+          stdin: true
+          tty: true
+          volumeMounts:
+            - mountPath: /app/node_modules
+              name: node-modules
+            - mountPath: /app
+              name: notes-app-claim1
+      restartPolicy: Always
+      volumes:
+        - name: node-modules
+          persistentVolumeClaim:
+            claimName: node-modules
+        - name: notes-app-claim1
+          persistentVolumeClaim:
+            claimName: notes-app-claim1
+status: {}

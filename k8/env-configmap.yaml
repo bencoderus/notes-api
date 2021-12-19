@@ -1,0 +1,22 @@
+apiVersion: v1
+data:
+  APP_NAME: Notes-api
+  APP_PORT: "3000"
+  APP_URL: http://notes-api.app
+  DATABASE_HOST: localhost
+  DATABASE_NAME: notes_api
+  DATABASE_PASSWORD: ""
+  DATABASE_PORT: "3306"
+  DATABASE_USERNAME: root
+  JWT_SECRET: iamencoded@1/21/++
+  JWT_TOKEN_EXPIRES_IN_HOURS: 3000h
+  TEST_DATABASE_HOST: localhost
+  TEST_DATABASE_NAME: notes_test
+  TEST_DATABASE_PASSWORD: ""
+  TEST_DATABASE_USERNAME: root
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: notes-app-env
+  name: env

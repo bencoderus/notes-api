@@ -13,7 +13,7 @@ beforeAll(async () => {
   await DatabaseService.createConnection();
   const auth = await UserFactory.createWithToken();
   user = auth.user;
-  token = 'Bearer ' + auth.token;
+  token = `Bearer ${auth.token}`;
 });
 
 afterAll(async () => {
