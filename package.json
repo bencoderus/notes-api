@@ -42,7 +42,7 @@
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-prettier": "^3.4.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-async-handler": "^1.1.4",
     "faker": "^5.5.3",
     "global": "^4.4.0",
